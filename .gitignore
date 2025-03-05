@@ -1,0 +1,6 @@
+# Conda environment files
+env/
+*.pyc
+*.pyo
+__pycache__/
+*.log
