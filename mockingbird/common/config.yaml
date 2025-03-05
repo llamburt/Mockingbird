@@ -1,0 +1,8 @@
+# default config for mock data agents
+# should be processed by PyYAML module
+settings:
+    frequency: hourly
+    asset_type: stock
+    transactions:
+        avg_per_file: 40
+        deviation: 10
