@@ -94,7 +94,3 @@ df = pd.DataFrame(records)
 df.to_csv("sp_securities.csv", index=False)
 
 print("CSV file saved: sp_securities.csv")
-"""
-
-
-"""
