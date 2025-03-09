@@ -1,0 +1,9 @@
+# Mockingbird project management config file
+# it defines how the project is built, packaged, and managed
+
+[project]
+dependencies = [
+
+
+    
+]

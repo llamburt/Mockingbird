@@ -4,3 +4,7 @@ env/
 *.pyo
 __pycache__/
 *.log
+.vscode/
+ai_memory.txt
+commandCheatSheet.md
+getSP*.py
