@@ -1,5 +1,5 @@
 import yahooquery as yq
-import pandas as pd
+import json
 
 # Load S&P 500 and S&P 400 symbols from a file or manually define them
 sp500_symbols = [
@@ -67,30 +67,27 @@ sp400_symbols = [
 ]  
 
 all_symbols = sp500_symbols + sp400_symbols
-
+test_symbols = sp500_symbols[0:11]
 # Fetch data
 fields = ["symbol", "longName", "marketCap", "sharesOutstanding", "trailingEps", "trailingPE"]
-data = yq.Ticker(all_symbols).quote_summary(["summaryDetail", "defaultKeyStatistics"])
+qtype = yq.Ticker(test_symbols).quote_type
+sdetail = yq.Ticker(test_symbols).summary_detail
+kstats = yq.Ticker(test_symbols).key_stats
 
-# Extract relevant data
 records = []
-for symbol in all_symbols:
-    info = data.get(symbol, {})
-    details = info.get("summaryDetail", {})
-    stats = info.get("defaultKeyStatistics", {})
-
+for symbol in test_symbols: # Extract relevant data 
     record = {
         "symbol": symbol,
-        "name": info.get("quoteType", {}).get("longName", ""),
-        "market_cap": details.get("marketCap", {}).get("raw", ""),
-        "shares_outstanding": stats.get("sharesOutstanding", {}).get("raw", ""),
-        "eps": stats.get("trailingEps", {}).get("raw", ""),
-        "pe_ratio": stats.get("trailingPE", {}).get("raw", ""),
+        "currency": sdetail[symbol].get("currency", ""),
+        "name": qtype[symbol].get("longName", ""),
+        "market_cap": sdetail[symbol].get("marketCap", {}),
+        "shares_outstanding": kstats[symbol].get("sharesOutstanding", ""),
+        "eps": kstats[symbol].get("trailingEps", ""),
+        "pe_ratio": sdetail[symbol].get("trailingPE", "")
     }
     records.append(record)
 
 # Save to CSV
-df = pd.DataFrame(records)
-df.to_csv("sp_securities.csv", index=False)
-
-print("CSV file saved: sp_securities.csv")
+with open("securities.json", "w") as file:
+    json.dump(records, file, indent=4) 
+print("finished generating securities (./securities.json)")
